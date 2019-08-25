@@ -1,33 +1,56 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 40vmin;
-  pointer-events: none;
-}
-
-.App-header {
-  background-color: #282c34;
+.container {
+  display: flex;
   min-height: 100vh;
+  flex-direction: column;
+  font-family: Montserrat,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+}
+
+.header {
+  padding: 1.5rem;
+  display:flex;
+  font-weight: 700;
+  font-size: 1.75rem;
+  background-color: #2c3e50;
+  color: #ffffff;
+}
+
+.content {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  text-align: center;
+  background-color: #1abc9c;
+  color: #ffffff;
 }
 
-.App-link {
-  color: #61dafb;
+.footer {
+  padding:10px;
+  display:flex;
+  justify-content: center;
+  text-align: center;
+  font-size: 0.7rem;
+  background-color: #2c3e50;
+  color: #ffffff;
+  padding: 20px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.footer a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.description {
+  margin: 20px 20px 60px 20px;
+  font-size: 1.5rem;
+}
+
+.title {
+  margin-left: 20px;
+}
+
+
+.searchbox input {
+  font-size: 2rem;
+  padding: 5px;
 }
