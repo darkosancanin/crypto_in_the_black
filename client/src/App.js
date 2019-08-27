@@ -1,6 +1,7 @@
 import React from 'react';
 import Logo from './logo.svg'
 import './App.css';
+import { Search } from './Search';
 
 function App() {
   return (
@@ -9,8 +10,8 @@ function App() {
         <img src={Logo}></img><span className="title">Crypto In The Black</span>
       </header>
       <div className="content">
-        <div className="description">Find out how many days it has been protifable to buy and hold different cryptocurrencies.</div>
-        <div className="searchbox"><input type="text" placeholder="e.g. bitcoin" /></div>
+        <div className="description">Find out how many days it has been protifable to buy and hold different cryptocurrencies. </div>
+        <Search/>
       </div>
       <footer className="footer">
         <div>

@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
-Description: 'An AWS Serverless Application.'
+Description: 'CryptoInTheBlack.com - AWS Serverless Application.'
 
 Parameters:
   DomainName:
@@ -10,6 +10,13 @@ Parameters:
     Type: String
     Default: cryptointheblack.com.
 
+Globals:
+  Api:
+    Cors:
+      AllowMethods: "'OPTIONS,GET'"
+      AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+      AllowOrigin: "'*'"
+
 Resources:
   Search:
     Type: AWS::Serverless::Function
@@ -17,7 +24,7 @@ Resources:
       Handler: CryptoInTheBlack::CryptoInTheBlack.Function.CoinFunctions::Search
       Runtime: dotnetcore2.1
       CodeUri: ""
-      MemorySize: 128
+      MemorySize: 256
       Timeout: 30
       Role: null
       Policies: AWSLambdaBasicExecutionRole
@@ -34,7 +41,7 @@ Resources:
       Handler: CryptoInTheBlack::CryptoInTheBlack.Function.CoinFunctions::Coin
       Runtime: dotnetcore2.1
       CodeUri: ""
-      MemorySize: 128
+      MemorySize: 256
       Timeout: 30
       Role: null
       Policies: AWSLambdaBasicExecutionRole
