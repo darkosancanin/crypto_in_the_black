@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryptoInTheBlack", "server\CryptoInTheBlack.csproj", "{9801EA5C-0E3E-4C4A-AA7B-31EDA0F0FEA3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryptoInTheBlack", "server\CryptoInTheBlack\CryptoInTheBlack.csproj", "{9801EA5C-0E3E-4C4A-AA7B-31EDA0F0FEA3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CryptoInTheBlack.Tests", "server\CryptoInTheBlack.Tests\CryptoInTheBlack.Tests.csproj", "{D96B3599-5BCA-4908-ACD9-2885C1369F29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoInTheBlack.Cli", "server\CryptoInTheBlack.Cli\CryptoInTheBlack.Cli.csproj", "{3EE61FE8-8934-4C8E-B271-4B12965A37E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoInTheBlack.IntegrationTests", "server\CryptoInTheBlack.IntegrationTests\CryptoInTheBlack.IntegrationTests.csproj", "{058F8D3D-AF4E-4DDD-8C05-389917F2571B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{9801EA5C-0E3E-4C4A-AA7B-31EDA0F0FEA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9801EA5C-0E3E-4C4A-AA7B-31EDA0F0FEA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9801EA5C-0E3E-4C4A-AA7B-31EDA0F0FEA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D96B3599-5BCA-4908-ACD9-2885C1369F29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D96B3599-5BCA-4908-ACD9-2885C1369F29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D96B3599-5BCA-4908-ACD9-2885C1369F29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D96B3599-5BCA-4908-ACD9-2885C1369F29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EE61FE8-8934-4C8E-B271-4B12965A37E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EE61FE8-8934-4C8E-B271-4B12965A37E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EE61FE8-8934-4C8E-B271-4B12965A37E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EE61FE8-8934-4C8E-B271-4B12965A37E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{058F8D3D-AF4E-4DDD-8C05-389917F2571B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{058F8D3D-AF4E-4DDD-8C05-389917F2571B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{058F8D3D-AF4E-4DDD-8C05-389917F2571B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{058F8D3D-AF4E-4DDD-8C05-389917F2571B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
