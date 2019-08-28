@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using Newtonsoft.Json;
@@ -30,7 +31,7 @@ namespace CryptoInTheBlack.Function
             if (request.PathParameters == null || !request.PathParameters.ContainsKey(SYMBOL_PARAM_NAME))
                 return new APIGatewayProxyResponse { StatusCode = (int)HttpStatusCode.BadRequest, Body = $"Missing required parameter {SYMBOL_PARAM_NAME}" };
 
-            var symbol = request.PathParameters[SYMBOL_PARAM_NAME];
+            var symbol = HttpUtility.UrlDecode(request.PathParameters[SYMBOL_PARAM_NAME]);
 
             if (!_coinRepository.CoinExists(symbol))
                 return new APIGatewayProxyResponse { StatusCode = (int)HttpStatusCode.NotFound, Body = $"Symbol not found: {symbol}" };
@@ -51,7 +52,7 @@ namespace CryptoInTheBlack.Function
             if (request.PathParameters == null || !request.PathParameters.ContainsKey(SEARCH_TEXT_PARAM_NAME))
                 return new APIGatewayProxyResponse { StatusCode = (int)HttpStatusCode.BadRequest, Body = $"Missing required parameter {SEARCH_TEXT_PARAM_NAME}" };
 
-            var searchText = request.PathParameters[SEARCH_TEXT_PARAM_NAME];
+            var searchText = HttpUtility.UrlDecode(request.PathParameters[SEARCH_TEXT_PARAM_NAME]);
             var searchResults = _coinRepository.SearchForCoins(searchText);
 
             return new APIGatewayProxyResponse

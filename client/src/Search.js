@@ -1,33 +1,38 @@
-import React from 'react';
-import AsyncSelect from 'react-select/async';
-
+import React from "react";
+import AsyncSelect from "react-select/async";
+import "./Search.css";
 
 export const Search = () => {
-    const loadOptions = (inputValue, callback) => {
-        const url = `https://api.cryptointheblack.com/search/${inputValue}`;
-        fetch(url).then(x => {
-            console.log(x);
-        });
-        //console.log(inputValue);
-        // setTimeout(() => {
-        //   callback([
-        //     { value: 'chocolate', label: 'Chocolate' },
-        //     { value: 'strawberry', label: 'Strawberry' },
-        //     { value: 'vanilla', label: 'Vanilla' }
-        //   ]);
-        // }, 1000);
-      };
+  const loadOptions = (inputValue, callback) => {
+    if (!inputValue) {
+      callback([]);
+      return;
+    }
+    const url = `https://api.cryptointheblack.com/search/${inputValue}`;
+    fetch(url).then(response => {
+      response.json().then(data => {
+        callback(
+          data.map(d => {
+            return { value: d.symbol, label: d.name };
+          })
+        );
+      });
+    });
+  };
 
-    return (
-        // <div className="searchbox"><input type="text" placeholder="e.g. bitcoin" /></div>
-        <div>
-        {/* <pre>inputValue: "{this.state.inputValue}"</pre> */}
-        <AsyncSelect
-          cacheOptions
-          loadOptions={loadOptions}
-          defaultOptions
-          //onInputChange={this.handleInputChange}
-        />
-      </div>
-    );
-}
+  const selectCustomStyles = {
+    option: (provided, state) => ({
+      ...provided,
+      color: state.isSelected ? "white" : "black"
+    })
+  };
+
+  return (
+    <AsyncSelect
+      cacheOptions
+      loadOptions={loadOptions}
+      defaultOptions
+      styles={selectCustomStyles}
+    />
+  );
+};
