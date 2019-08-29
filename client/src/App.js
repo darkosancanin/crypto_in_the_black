@@ -1,6 +1,7 @@
 import React from "react";
 import Logo from "./logo.svg";
 import { Search } from "./Search";
+import { CoinInfo } from "./CoinInfo";
 import styled from "styled-components";
 
 function App() {
@@ -40,8 +41,9 @@ function App() {
     flex: 1;
     display: flex;
     flex-direction: column;
-
     text-align: center;
+    padding-left: 50px;
+    padding-right: 50px;
   `;
 
   const Title = styled.span`
@@ -71,6 +73,10 @@ function App() {
     margin: 0 auto;
   `;
 
+  const onSelected = e => {
+    console.log(e);
+  };
+
   return (
     <Background>
       <FlexContainer>
@@ -84,8 +90,9 @@ function App() {
             different cryptocurrencies.
           </HeaderContent>
           <SearchContainer>
-            <Search />
+            <Search onSelected={onSelected} />
           </SearchContainer>
+          <CoinInfo />
         </MainContent>
         <Footer>
           <div>

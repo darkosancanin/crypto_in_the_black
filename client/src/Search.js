@@ -1,7 +1,7 @@
 import React from "react";
 import AsyncSelect from "react-select/async";
 
-export const Search = () => {
+export const Search = props => {
   const loadOptions = (inputValue, callback) => {
     if (!inputValue) {
       callback([]);
@@ -27,7 +27,7 @@ export const Search = () => {
     option: (provided, state) => ({
       ...provided,
       backgroundColor: state.isFocused ? "#EDDA36" : "white",
-      color: state.isSelected ? "white" : "black"
+      color: "black"
     })
   };
 
@@ -37,6 +37,8 @@ export const Search = () => {
       loadOptions={loadOptions}
       defaultOptions
       styles={selectCustomStyles}
+      onChange={e => props.onSelected(e)}
+      placeholder="Search for coin..."
     />
   );
 };
