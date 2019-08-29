@@ -1,6 +1,5 @@
 import React from "react";
 import AsyncSelect from "react-select/async";
-import "./Search.css";
 
 export const Search = () => {
   const loadOptions = (inputValue, callback) => {
@@ -21,8 +20,13 @@ export const Search = () => {
   };
 
   const selectCustomStyles = {
+    control: (provided, state) => ({
+      ...provided,
+      padding: "5px"
+    }),
     option: (provided, state) => ({
       ...provided,
+      backgroundColor: state.isFocused ? "#EDDA36" : "white",
       color: state.isSelected ? "white" : "black"
     })
   };
