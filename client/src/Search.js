@@ -1,5 +1,6 @@
 import React from "react";
 import AsyncSelect from "react-select/async";
+import styled from "styled-components";
 
 export const Search = props => {
   const loadOptions = (inputValue, callback) => {
@@ -7,16 +8,17 @@ export const Search = props => {
       callback([]);
       return;
     }
-    const url = `https://api.cryptointheblack.com/search/${inputValue}`;
-    fetch(url).then(response => {
-      response.json().then(data => {
-        callback(
-          data.map(d => {
-            return { value: d.symbol, label: d.name };
-          })
-        );
-      });
-    });
+    fetch(`https://api.cryptointheblack.com/search/${inputValue}`).then(
+      response => {
+        response.json().then(data => {
+          callback(
+            data.map(d => {
+              return { value: d.symbol, label: d.name };
+            })
+          );
+        });
+      }
+    );
   };
 
   const selectCustomStyles = {
@@ -31,14 +33,25 @@ export const Search = props => {
     })
   };
 
+  const SearchContainer = styled.div`
+    width: 580px;
+    margin: 0 auto;
+  `;
+
+  const onCoinSelected = e => {
+    props.history.push(`/${e.value}`);
+  };
+
   return (
-    <AsyncSelect
-      cacheOptions
-      loadOptions={loadOptions}
-      defaultOptions
-      styles={selectCustomStyles}
-      onChange={e => props.onSelected(e)}
-      placeholder="Search for coin..."
-    />
+    <SearchContainer>
+      <AsyncSelect
+        cacheOptions
+        loadOptions={loadOptions}
+        defaultOptions
+        styles={selectCustomStyles}
+        onChange={onCoinSelected}
+        placeholder="Search for coin..."
+      />
+    </SearchContainer>
   );
 };

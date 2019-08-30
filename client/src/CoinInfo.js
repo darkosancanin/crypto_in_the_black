@@ -1,5 +1,5 @@
-import React, { PureComponent } from "react";
-import { PieChart, Pie, Sector, Cell } from "recharts";
+import React, { useEffect, useState } from "react";
+import { PieChart, Pie } from "recharts";
 import styled from "styled-components";
 
 const Cointainer = styled.div`
@@ -13,19 +13,26 @@ const CoinParagraph = styled.div`
 `;
 
 const GraphContainer = styled.div`
-  margin-top: 50px;
-  margin-bottom: 50px;
   display: flex;
   justify-content: center;
 `;
 
-export const CoinInfo = () => {
-  const data = [
-    { name: "Profitable", value: 76 },
-    { name: "Not Profitable", value: 24 }
-  ];
-  const renderCustomBarLabel = e => {
-    console.log(e);
+export const CoinInfo = props => {
+  const [coin, setCoin] = useState(undefined);
+
+  useEffect(() => {
+    if (props.match.params.symbol) {
+      fetch(
+        `https://api.cryptointheblack.com/coin/${props.match.params.symbol}`
+      ).then(response => {
+        response.json().then(data => {
+          setCoin(data);
+        });
+      });
+    }
+  }, [props.match.params.symbol]);
+
+  const renderCustomPieChartLabel = e => {
     return (
       <text
         x={e.x}
@@ -39,31 +46,62 @@ export const CoinInfo = () => {
     );
   };
 
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec"
+  ];
+  const formatDate = dateValue => {
+    let dateToFromat = new Date(dateValue);
+    return `${dateToFromat.getDate()} ${
+      months[dateToFromat.getMonth()]
+    } ${dateToFromat.getFullYear()}`;
+  };
+
+  if (!coin) return <>test</>;
+  console.log("coin", coin);
   return (
     <Cointainer>
       <CoinParagraph>
-        It has been profitable to buy and hold Ethereum for 333 out of the last
-        435 days (76%) since 23 April 2012.
+        It has been profitable to buy and hold {coin.name} for{" "}
+        {coin.daysProfitable} out of the last {coin.totalDays} days (
+        {coin.daysProfitablePercentage}%) since {formatDate(coin.sinceDate)}.
       </CoinParagraph>
       <GraphContainer>
-        <PieChart width={250} height={200}>
+        <PieChart width={300} height={300}>
           <Pie
             dataKey="value"
             startAngle={0}
             endAngle={360}
-            data={data}
-            cx={100}
-            cy={100}
+            data={[
+              { name: "Profitable", value: coin.daysProfitablePercentage },
+              {
+                name: "Not Profitable",
+                value: coin.daysNotProfitablePercentage
+              }
+            ]}
+            cx={150}
+            cy={150}
             outerRadius={80}
             fill="#EDDA36"
             unit="%"
-            label={renderCustomBarLabel}
+            label={renderCustomPieChartLabel}
           />
         </PieChart>
       </GraphContainer>
       <CoinParagraph>
-        It has not been profitable to buy and hold Ethereum for 124 out of the
-        last 435 days (24%).
+        It has not been profitable to buy and hold {coin.name} for{" "}
+        {coin.daysNotProfitable} out of the last {coin.totalDays} days (
+        {coin.daysNotProfitablePercentage}%).
       </CoinParagraph>
     </Cointainer>
   );
