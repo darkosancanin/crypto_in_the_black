@@ -10,7 +10,6 @@ export const Search = () => {
       callback(coinContext.defaultSearchResults);
       return;
     }
-    console.log(`Searching for '${inputValue}'.`);
     fetch(`https://api.cryptointheblack.com/search/${inputValue}`).then(
       response => {
         response.json().then(data => {

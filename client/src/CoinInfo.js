@@ -44,13 +44,11 @@ export const CoinInfo = props => {
       setCoin(undefined);
       setIsLoading(true);
       setHasError(false);
-      console.log(`Retrieving coin '${coinContext.symbol}'`);
       fetch(`https://api.cryptointheblack.com/coin/${coinContext.symbol}`)
         .then(response => {
           response
             .json()
             .then(data => {
-              console.log(data);
               setCoin(data);
               setIsLoading(false);
             })
@@ -138,6 +136,7 @@ export const CoinInfo = props => {
                 fill="#EDDA36"
                 unit="%"
                 label={renderCustomPieChartLabel}
+                isAnimationActive={false}
               />
             </PieChart>
           </GraphContainer>
