@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { PieChart, Pie } from "recharts";
 import styled from "styled-components";
+import { CoinContext } from "./CoinContext";
 
 const Cointainer = styled.div`
   margin-top: 50px;
@@ -17,20 +18,52 @@ const GraphContainer = styled.div`
   justify-content: center;
 `;
 
+const CoinLogoImg = styled.img`
+  margin-bottom: 50px;
+`;
+
 export const CoinInfo = props => {
+  const coinContext = useContext(CoinContext);
+
+  if (!coinContext.symbol) {
+    coinContext.setSymbol(props.match.params.symbol || "btc");
+  }
+
   const [coin, setCoin] = useState(undefined);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  const onError = err => {
+    console.log("Error", err);
+    setHasError(true);
+    setIsLoading(false);
+  };
 
   useEffect(() => {
-    if (props.match.params.symbol) {
-      fetch(
-        `https://api.cryptointheblack.com/coin/${props.match.params.symbol}`
-      ).then(response => {
-        response.json().then(data => {
-          setCoin(data);
-        });
-      });
+    if (coinContext.symbol) {
+      setCoin(undefined);
+      setIsLoading(true);
+      setHasError(false);
+      console.log(`Retrieving coin '${coinContext.symbol}'`);
+      fetch(`https://api.cryptointheblack.com/coin/${coinContext.symbol}`)
+        .then(response => {
+          response
+            .json()
+            .then(data => {
+              console.log(data);
+              setCoin(data);
+              setIsLoading(false);
+            })
+            .catch(onError);
+        })
+        .catch(onError);
     }
-  }, [props.match.params.symbol]);
+  }, [coinContext.symbol]);
+
+  useEffect(() => {
+    if (coin)
+      document.title = `Crypto In The Black - ${coin.name} (${coin.symbol})`;
+  }, [coin]);
 
   const renderCustomPieChartLabel = e => {
     return (
@@ -46,63 +79,75 @@ export const CoinInfo = props => {
     );
   };
 
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec"
-  ];
   const formatDate = dateValue => {
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    ];
     let dateToFromat = new Date(dateValue);
     return `${dateToFromat.getDate()} ${
       months[dateToFromat.getMonth()]
     } ${dateToFromat.getFullYear()}`;
   };
 
-  if (!coin) return <>test</>;
-  console.log("coin", coin);
+  const Error = styled.div`
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 300;
+  `;
+
   return (
     <Cointainer>
-      <CoinParagraph>
-        It has been profitable to buy and hold {coin.name} for{" "}
-        {coin.daysProfitable} out of the last {coin.totalDays} days (
-        {coin.daysProfitablePercentage}%) since {formatDate(coin.sinceDate)}.
-      </CoinParagraph>
-      <GraphContainer>
-        <PieChart width={300} height={300}>
-          <Pie
-            dataKey="value"
-            startAngle={0}
-            endAngle={360}
-            data={[
-              { name: "Profitable", value: coin.daysProfitablePercentage },
-              {
-                name: "Not Profitable",
-                value: coin.daysNotProfitablePercentage
-              }
-            ]}
-            cx={150}
-            cy={150}
-            outerRadius={80}
-            fill="#EDDA36"
-            unit="%"
-            label={renderCustomPieChartLabel}
-          />
-        </PieChart>
-      </GraphContainer>
-      <CoinParagraph>
-        It has not been profitable to buy and hold {coin.name} for{" "}
-        {coin.daysNotProfitable} out of the last {coin.totalDays} days (
-        {coin.daysNotProfitablePercentage}%).
-      </CoinParagraph>
+      {hasError && <Error>Oops something went wrong. Please try again.</Error>}
+      {isLoading && <img src="/loading.gif" alt="Loading..." />}
+      {coin && (
+        <>
+          {coin.image && <CoinLogoImg src={coin.image} title={coin.name} />}
+          <CoinParagraph>
+            It has been profitable to buy and hold {coin.name} for{" "}
+            {coin.daysProfitable} out of the last {coin.totalDays} days (
+            {coin.daysProfitablePercentage}%) since {formatDate(coin.sinceDate)}
+            .
+          </CoinParagraph>
+          <GraphContainer>
+            <PieChart width={300} height={300}>
+              <Pie
+                dataKey="value"
+                startAngle={0}
+                endAngle={360}
+                data={[
+                  { name: "Profitable", value: coin.daysProfitablePercentage },
+                  {
+                    name: "Not Profitable",
+                    value: coin.daysNotProfitablePercentage
+                  }
+                ]}
+                cx={150}
+                cy={150}
+                outerRadius={80}
+                fill="#EDDA36"
+                unit="%"
+                label={renderCustomPieChartLabel}
+              />
+            </PieChart>
+          </GraphContainer>
+          <CoinParagraph>
+            It has not been profitable to buy and hold {coin.name} for{" "}
+            {coin.daysNotProfitable} out of the last {coin.totalDays} days (
+            {coin.daysNotProfitablePercentage}%).
+          </CoinParagraph>
+        </>
+      )}
     </Cointainer>
   );
 };

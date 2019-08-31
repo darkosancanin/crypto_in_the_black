@@ -1,21 +1,24 @@
-import React from "react";
+import React, { useContext } from "react";
 import AsyncSelect from "react-select/async";
 import styled from "styled-components";
+import { CoinContext } from "./CoinContext";
 
-export const Search = props => {
+export const Search = () => {
+  const coinContext = useContext(CoinContext);
   const loadOptions = (inputValue, callback) => {
-    if (!inputValue) {
-      callback([]);
+    if (!inputValue && coinContext.defaultSearchResults.length > 0) {
+      callback(coinContext.defaultSearchResults);
       return;
     }
+    console.log(`Searching for '${inputValue}'.`);
     fetch(`https://api.cryptointheblack.com/search/${inputValue}`).then(
       response => {
         response.json().then(data => {
-          callback(
-            data.map(d => {
-              return { value: d.symbol, label: d.name };
-            })
-          );
+          var results = data.map(d => {
+            return { value: d.symbol, label: d.name };
+          });
+          if (!inputValue) coinContext.setDefaultSearchResults(results);
+          callback(results);
         });
       }
     );
@@ -38,10 +41,6 @@ export const Search = props => {
     margin: 0 auto;
   `;
 
-  const onCoinSelected = e => {
-    props.history.push(`/${e.value}`);
-  };
-
   return (
     <SearchContainer>
       <AsyncSelect
@@ -49,7 +48,7 @@ export const Search = props => {
         loadOptions={loadOptions}
         defaultOptions
         styles={selectCustomStyles}
-        onChange={onCoinSelected}
+        onChange={e => coinContext.setSymbol(e.value)}
         placeholder="Search for coin..."
       />
     </SearchContainer>

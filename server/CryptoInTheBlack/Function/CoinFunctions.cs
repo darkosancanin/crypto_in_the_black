@@ -49,10 +49,10 @@ namespace CryptoInTheBlack.Function
 
         public APIGatewayProxyResponse Search(APIGatewayProxyRequest request, ILambdaContext context)
         {
-            if (request.PathParameters == null || !request.PathParameters.ContainsKey(SEARCH_TEXT_PARAM_NAME))
-                return new APIGatewayProxyResponse { StatusCode = (int)HttpStatusCode.BadRequest, Body = $"Missing required parameter {SEARCH_TEXT_PARAM_NAME}" };
+            string searchText = null;
+            if (request.PathParameters != null && request.PathParameters.ContainsKey(SEARCH_TEXT_PARAM_NAME))
+                searchText = HttpUtility.UrlDecode(request.PathParameters[SEARCH_TEXT_PARAM_NAME]);
 
-            var searchText = HttpUtility.UrlDecode(request.PathParameters[SEARCH_TEXT_PARAM_NAME]);
             var searchResults = _coinRepository.SearchForCoins(searchText);
 
             return new APIGatewayProxyResponse

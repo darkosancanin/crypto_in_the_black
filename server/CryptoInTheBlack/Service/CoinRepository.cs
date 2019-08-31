@@ -38,7 +38,8 @@ namespace CryptoInTheBlack.Service
         public List<CoinSearchResult> SearchForCoins(string searchText, int maxResults = 20)
         {
             return _coins
-                .Where(x => x.Name.Contains(searchText, StringComparison.InvariantCultureIgnoreCase) ||
+                .Where(x => searchText == null || 
+                            x.Name.Contains(searchText, StringComparison.InvariantCultureIgnoreCase) ||
                             x.Symbol.Contains(searchText, StringComparison.CurrentCultureIgnoreCase))
                 .OrderBy(x => x.MarketCapRank)
                 .Take(maxResults)

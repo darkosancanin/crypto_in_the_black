@@ -12,6 +12,7 @@ namespace CryptoInTheBlack.Model.View
             Name = coin.Name;
             Symbol = coin.Symbol;
             Image = coin.SmallImage;
+            Url = coin.Homepage;
             TotalDays = priceHistory.Count;
 
             if (priceHistory.Count > 0)
@@ -37,6 +38,9 @@ namespace CryptoInTheBlack.Model.View
 
         [JsonProperty(PropertyName = "image")]
         public string Image { get; set; }
+
+        [JsonProperty(PropertyName = "url")]
+        public string Url { get; set; }
 
         [JsonProperty(PropertyName = "daysProfitable")]
         public int DaysProfitable { get; set; }

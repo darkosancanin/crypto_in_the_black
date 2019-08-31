@@ -35,13 +35,13 @@ namespace CryptoInTheBlack.Tests.Function
         }
 
         [Fact]
-        public void Search_returns_bad_request_if_no_search_text_param_passed()
+        public void Search_returns_results_even_if_no_search_text_param_passed()
         {
             var coinFunctions = new CoinFunctions();
 
             var response = coinFunctions.Search(new APIGatewayProxyRequest(), new TestLambdaContext());
 
-            Assert.Equal(response.StatusCode, (int)HttpStatusCode.BadRequest);
+            Assert.Equal(response.StatusCode, (int)HttpStatusCode.OK);
         }
     }
 }

@@ -9,6 +9,9 @@ Parameters:
   HostedZoneName:
     Type: String
     Default: cryptointheblack.com.
+  SslCertificate:
+    Type: String
+    Default: arn:aws:acm:us-east-1:447069887009:certificate/51c9fb90-f271-4366-8116-450e6c606fee
 
 Globals:
   Api:
@@ -29,10 +32,15 @@ Resources:
       Role: null
       Policies: AWSLambdaBasicExecutionRole
       Events: 
-        RootGet: 
+        Search: 
           Type: Api 
           Properties: 
-            Path: /search/{searchText} 
+            Path: /search/{searchText+} 
+            Method: GET
+        RootSearch: 
+          Type: Api 
+          Properties: 
+            Path: /search
             Method: GET
 
   Coin:
@@ -46,7 +54,7 @@ Resources:
       Role: null
       Policies: AWSLambdaBasicExecutionRole
       Events: 
-        RootGet: 
+        Coin: 
           Type: Api 
           Properties: 
             Path: /coin/{symbol} 
@@ -55,7 +63,7 @@ Resources:
   APIDomainName:
     Type: AWS::ApiGateway::DomainName
     Properties: 
-      CertificateArn: arn:aws:acm:us-east-1:447069887009:certificate/51c9fb90-f271-4366-8116-450e6c606fee
+      CertificateArn: !Ref SslCertificate
       DomainName: !Ref DomainName
 
   APIBasePathMapping:

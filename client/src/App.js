@@ -1,15 +1,15 @@
 import React from "react";
 import Logo from "./logo.svg";
-import { Search } from "./Search";
 import { CoinInfo } from "./CoinInfo";
 import styled from "styled-components";
-import { BrowserRouter as Router, Route, withRouter } from "react-router-dom";
+import { Search } from "./Search";
+import { CoinContextProvider } from "./CoinContext";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
 function App() {
   const Background = styled.div`
-    background-image: url("/stacked-coins-on-a-table.jpg");
+    background-image: url("/crypto_in_the_black_bg.jpg");
     height: 100vh;
-    width: 100vw;
     position: relative;
     background-size: cover;
     background-repeat: no-repeat;
@@ -69,36 +69,36 @@ function App() {
     margin-bottom: 50px;
   `;
 
-  const SearchWithRouter = withRouter(Search);
-
   return (
-    <Background>
-      <FlexContainer>
-        <MainContent>
-          <HeaderContent>
-            <Heading>
-              <HeadingImg src={Logo} />
-              <Title>Crypto In The Black</Title>
-            </Heading>
-            Find out how many days it has been protifable to buy and hold
-            different cryptocurrencies.
-          </HeaderContent>
-          <Router>
-            <SearchWithRouter />
-            <Route path="/:symbol?" component={CoinInfo} />
-          </Router>
-        </MainContent>
-        <Footer>
-          <div>
-            <FooterLink href="https://www.coingecko.com">
-              Data provided by CoinGecko
-            </FooterLink>
-            <br />
-            &copy; CryptoInTheBlack.com {new Date().getFullYear()}
-          </div>
-        </Footer>
-      </FlexContainer>
-    </Background>
+    <CoinContextProvider>
+      <Background>
+        <FlexContainer>
+          <MainContent>
+            <HeaderContent>
+              <Heading>
+                <HeadingImg src={Logo} />
+                <Title>Crypto In The Black</Title>
+              </Heading>
+              Find out how many days it has been protifable to buy and hold
+              different cryptocurrencies.
+            </HeaderContent>
+            <Search />
+            <Router>
+              <Route path="/:symbol?" component={CoinInfo} />
+            </Router>
+          </MainContent>
+          <Footer>
+            <div>
+              <FooterLink href="https://www.coingecko.com">
+                Data provided by CoinGecko
+              </FooterLink>
+              <br />
+              &copy; CryptoInTheBlack.com {new Date().getFullYear()}
+            </div>
+          </Footer>
+        </FlexContainer>
+      </Background>
+    </CoinContextProvider>
   );
 }
 
