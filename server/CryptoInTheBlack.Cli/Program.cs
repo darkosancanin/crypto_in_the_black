@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using CommandLine;
 using CryptoInTheBlack.Service;
 
@@ -16,7 +15,7 @@ namespace CryptoInTheBlack.Cli
                 })
                 .WithParsed<SitemapOptions>(o =>
                 {
-                    Console.WriteLine($"SitemapFile: {o.OutputFile}");
+                    new SitemapGenerator().GenerateSitemapFile(o.OutputFile);
                 });
         }
     }

@@ -45,7 +45,8 @@ namespace CryptoInTheBlack.Cli
 
         public string GetCoinDataFile(List<CoinGeckoCoinDetail> coins)
         {
-            var coinContent = string.Join(Environment.NewLine, coins.Select(x => $"new Coin(\"{x.Id}\", @\"{FormatValueForCode(x.Name)}\", \"{x.Symbol}\", @\"{FormatValueForCode(x.Description?.English)}\", \"{x.Links?.Homepage?.First()}\", \"{x.Images?.Thumb}\", \"{x.Images?.Small}\", \"{x.Images?.Large}\", {x.MarketCapRank ?? 0}),"));
+            var uniqueCoins = coins.Where(x => x.MarketCapRank > 0).GroupBy(x => x.Symbol).Select(x => x.OrderBy(y => y.MarketCapRank).First()).ToList();
+            var coinContent = string.Join(Environment.NewLine, uniqueCoins.Select(x => $"new Coin(\"{x.Id}\", @\"{FormatValueForCode(x.Name)}\", \"{x.Symbol}\", @\"{FormatValueForCode(x.Description?.English)}\", \"{x.Links?.Homepage?.First()}\", \"{x.Images?.Thumb}\", \"{x.Images?.Small}\", \"{x.Images?.Large}\", {x.MarketCapRank ?? 0}),"));
             
             return $@"using System.Collections.Generic;
 

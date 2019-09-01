@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { PieChart, Pie } from "recharts";
 import styled from "styled-components";
 import { CoinContext } from "./CoinContext";
+import { Helmet } from "react-helmet";
 
 const Cointainer = styled.div`
   margin-top: 50px;
@@ -58,11 +59,6 @@ export const CoinInfo = props => {
     }
   }, [coinContext.symbol]);
 
-  useEffect(() => {
-    if (coin)
-      document.title = `Crypto In The Black - ${coin.name} (${coin.symbol})`;
-  }, [coin]);
-
   const renderCustomPieChartLabel = e => {
     return (
       <text
@@ -110,6 +106,9 @@ export const CoinInfo = props => {
       {isLoading && <img src="/loading.gif" alt="Loading..." />}
       {coin && (
         <>
+          <Helmet>
+            <title>{`Crypto In The Black - ${coin.name} (${coin.symbol})`}</title>
+          </Helmet>
           {coin.image && <CoinLogoImg src={coin.image} title={coin.name} />}
           <CoinParagraph>
             It has been profitable to buy and hold {coin.name} for{" "}
