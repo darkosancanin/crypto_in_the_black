@@ -50,6 +50,9 @@ function App() {
   const Title = styled.span`
     margin-left: 20px;
     font-size: 1.5em;
+    @media (max-width: 768px) {
+      display: block;
+    }
   `;
 
   const HeaderContent = styled.div`
@@ -58,6 +61,8 @@ function App() {
     color: white;
     margin-top: 50px;
     margin-bottom: 50px;
+    display: flex;
+    flex-direction: column;
   `;
 
   const HeadingImg = styled.img`

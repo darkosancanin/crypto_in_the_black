@@ -38,6 +38,9 @@ export const Search = () => {
   const SearchContainer = styled.div`
     width: 580px;
     margin: 0 auto;
+    @media (max-width: 650px) {
+      width: 320px;
+    }
   `;
 
   return (
