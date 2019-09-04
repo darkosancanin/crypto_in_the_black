@@ -49,7 +49,7 @@ namespace CryptoInTheBlack.Cli
         public string Location { get; set; }
 
         [XmlElement(ElementName = "lastmod")]
-        public string LastModified { get; set; }
+        public string LastModified { get; set; }    
 
         [XmlElement(ElementName = "changefreq")]
         public string ChangeFrequency { get; set; }

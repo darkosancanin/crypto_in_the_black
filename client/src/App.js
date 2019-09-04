@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { Search } from "./Search";
 import { CoinContextProvider } from "./CoinContext";
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import Email from "./email.svg";
 
 function App() {
   const Background = styled.div`
@@ -74,6 +75,10 @@ function App() {
     margin-bottom: 50px;
   `;
 
+  const EmailImg = styled.img`
+    margin-top: 5px;
+  `;
+
   return (
     <CoinContextProvider>
       <Background>
@@ -81,7 +86,7 @@ function App() {
           <MainContent>
             <HeaderContent>
               <Heading>
-                <HeadingImg src={Logo} />
+                <HeadingImg src={Logo} alt="Crypto In The Black" />
                 <Title>Crypto In The Black</Title>
               </Heading>
               Find out how many days it has been protifable to buy and hold
@@ -99,6 +104,10 @@ function App() {
               </FooterLink>
               <br />
               &copy; CryptoInTheBlack.com {new Date().getFullYear()}
+              <br />
+              <a href="mailto:darko.sancanin@gmail.com">
+                <EmailImg src={Email} alt="Contact" />
+              </a>
             </div>
           </Footer>
         </FlexContainer>
