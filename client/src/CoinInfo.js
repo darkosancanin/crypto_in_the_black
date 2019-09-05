@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { PieChart, Pie } from "recharts";
+import { PieChart, Pie, Cell } from "recharts";
 import styled from "styled-components";
 import { CoinContext } from "./CoinContext";
 import { Helmet } from "react-helmet";
@@ -136,7 +136,10 @@ export const CoinInfo = props => {
                 unit="%"
                 label={renderCustomPieChartLabel}
                 isAnimationActive={false}
-              />
+              >
+                <Cell key={`1`} fill="#EDDA36" />
+                <Cell key={`2`} fill="#EDDA360A" />
+              </Pie>
             </PieChart>
           </GraphContainer>
           <CoinParagraph>
