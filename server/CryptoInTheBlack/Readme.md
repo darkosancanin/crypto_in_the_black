@@ -4,8 +4,14 @@
 # Compile
 sam build
 
+# Built Artifacts  : .aws-sam\build
+# Built Template   : .aws-sam\build\template.yaml
+
+# Change into the build directory
+cd .aws-sam\build
+
 # Package SAM template
-sam package --template-file template.yml --s3-bucket cryptointheblack --output-template-file packaged.yml
+sam package --template-file template.yaml --s3-bucket cryptointheblack --output-template-file packaged.yml
 
 # Deploy packaged SAM template
 $ sam deploy --template-file packaged.yml --stack-name dev-cryptointheblack --capabilities CAPABILITY_IAM
