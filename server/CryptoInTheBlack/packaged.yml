@@ -1,0 +1,113 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: CryptoInTheBlack.com - AWS Serverless Application.
+Parameters:
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues:
+    - dev
+    - staging
+    - prod
+  HostedZoneName:
+    Type: String
+    Default: cryptointheblack.com.
+  SslCertificate:
+    Type: String
+    Default: arn:aws:acm:us-east-1:447069887009:certificate/51c9fb90-f271-4366-8116-450e6c606fee
+Mappings:
+  EnvironmentMap:
+    dev:
+      DomainName: dev-api.cryptointheblack.com
+      HVMG2: ami-0a584ac55a7631c0c
+    staging:
+      DomainName: staging-api.cryptointheblack.com
+      HVMG2: ami-066ee5fd4a9ef77f1
+    prod:
+      DomainName: api.cryptointheblack.com
+      HVMG2: ami-0a7c483d527806435
+Globals:
+  Api:
+    Cors:
+      AllowMethods: '''OPTIONS,GET'''
+      AllowHeaders: '''Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'''
+      AllowOrigin: '''*'''
+Resources:
+  Search:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: CryptoInTheBlack::CryptoInTheBlack.Function.CoinFunctions::Search
+      Runtime: dotnetcore2.1
+      CodeUri: s3://cryptointheblack/276de7f62e8b35f3d201f8c73d1ec8d6
+      MemorySize: 256
+      Timeout: 30
+      Role: null
+      Policies: AWSLambdaBasicExecutionRole
+      Events:
+        Search:
+          Type: Api
+          Properties:
+            Path: /search/{searchText+}
+            Method: GET
+        RootSearch:
+          Type: Api
+          Properties:
+            Path: /search
+            Method: GET
+  Coin:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: CryptoInTheBlack::CryptoInTheBlack.Function.CoinFunctions::Coin
+      Runtime: dotnetcore2.1
+      CodeUri: s3://cryptointheblack/276de7f62e8b35f3d201f8c73d1ec8d6
+      MemorySize: 256
+      Timeout: 30
+      Role: null
+      Policies: AWSLambdaBasicExecutionRole
+      Events:
+        Coin:
+          Type: Api
+          Properties:
+            Path: /coin/{symbol}
+            Method: GET
+  APIDomainName:
+    Type: AWS::ApiGateway::DomainName
+    Properties:
+      CertificateArn:
+        Ref: SslCertificate
+      DomainName:
+        Fn::FindInMap:
+        - EnvironmentMap
+        - Ref: Environment
+        - DomainName
+  APIBasePathMapping:
+    Type: AWS::ApiGateway::BasePathMapping
+    Properties:
+      DomainName:
+        Ref: APIDomainName
+      RestApiId:
+        Ref: ServerlessRestApi
+      Stage: Prod
+  APIDomain:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneName:
+        Ref: HostedZoneName
+      RecordSets:
+      - Name:
+          Fn::FindInMap:
+          - EnvironmentMap
+          - Ref: Environment
+          - DomainName
+        Type: A
+        AliasTarget:
+          DNSName:
+            Fn::GetAtt:
+            - APIDomainName
+            - DistributionDomainName
+          HostedZoneId: Z2FDTNDATAQYW2
+Outputs:
+  ApiURL:
+    Description: API endpoint URL for Prod environment
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/

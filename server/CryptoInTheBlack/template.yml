@@ -3,15 +3,28 @@ Transform: 'AWS::Serverless-2016-10-31'
 Description: 'CryptoInTheBlack.com - AWS Serverless Application.'
 
 Parameters:
-  DomainName:
+  Environment: 
     Type: String
-    Default: api.cryptointheblack.com
+    Default: dev
+    AllowedValues: 
+      - dev
+      - staging
+      - prod
   HostedZoneName:
     Type: String
     Default: cryptointheblack.com.
   SslCertificate:
     Type: String
     Default: arn:aws:acm:us-east-1:447069887009:certificate/51c9fb90-f271-4366-8116-450e6c606fee
+
+Mappings: 
+  EnvironmentMap: 
+    dev:
+      DomainName: dev-api.cryptointheblack.com
+    staging:
+      DomainName: staging-api.cryptointheblack.com
+    prod:
+      DomainName: api.cryptointheblack.com
 
 Globals:
   Api:
@@ -64,7 +77,7 @@ Resources:
     Type: AWS::ApiGateway::DomainName
     Properties: 
       CertificateArn: !Ref SslCertificate
-      DomainName: !Ref DomainName
+      DomainName: !FindInMap [EnvironmentMap, !Ref Environment, DomainName]
 
   APIBasePathMapping:
     Type: AWS::ApiGateway::BasePathMapping
@@ -78,7 +91,7 @@ Resources:
     Properties: 
       HostedZoneName: !Ref HostedZoneName
       RecordSets:
-      - Name: !Ref DomainName
+      - Name: !FindInMap [EnvironmentMap, !Ref Environment, DomainName]
         Type: A
         AliasTarget:
           DNSName: !GetAtt APIDomainName.DistributionDomainName

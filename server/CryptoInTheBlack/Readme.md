@@ -1,4 +1,18 @@
-# Empty AWS Serverless Application Project
+## CryptoInTheBlack.com - AWS Serverless Application Project
+
+```
+# Compile
+sam build
+
+# Package SAM template
+sam package --template-file template.yml --s3-bucket cryptointheblack --output-template-file packaged.yml
+
+# Deploy packaged SAM template
+$ sam deploy --template-file packaged.yml --stack-name dev-cryptointheblack --capabilities CAPABILITY_IAM
+
+# Delete stack
+aws cloudformation delete-stack --stack-name dev-cryptointheblack
+```
 
 This starter project consists of:
 * serverless.template - an AWS CloudFormation Serverless Application Model template file for declaring your Serverless functions and other AWS resources
