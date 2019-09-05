@@ -137,8 +137,8 @@ export const CoinInfo = props => {
                 label={renderCustomPieChartLabel}
                 isAnimationActive={false}
               >
-                <Cell key={`1`} fill="#EDDA36" />
-                <Cell key={`2`} fill="#EDDA360A" />
+                <Cell key="profitable" fill="#EDDA36" />
+                <Cell key="not-profitable" fill="#EDDA360A" />
               </Pie>
             </PieChart>
           </GraphContainer>
