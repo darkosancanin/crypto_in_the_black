@@ -10,7 +10,7 @@ export const Search = () => {
       callback(coinContext.defaultSearchResults);
       return;
     }
-    fetch(`https://api.cryptointheblack.com/search/${inputValue}`).then(
+    fetch(`${process.env.REACT_APP_API_BASE_URL}/search/${inputValue}`).then(
       response => {
         response.json().then(data => {
           var results = data.map(d => {

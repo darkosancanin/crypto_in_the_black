@@ -45,7 +45,7 @@ export const CoinInfo = props => {
       setCoin(undefined);
       setIsLoading(true);
       setHasError(false);
-      fetch(`https://api.cryptointheblack.com/coin/${coinContext.symbol}`)
+      fetch(`${process.env.REACT_APP_API_BASE_URL}/coin/${coinContext.symbol}`)
         .then(response => {
           response
             .json()
