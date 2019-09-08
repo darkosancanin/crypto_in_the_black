@@ -2,7 +2,7 @@
 
 namespace CryptoInTheBlack.Cli
 {
-    [Verb("generatecoin", HelpText = "Generates the CoinData file from CoinGecko.")]
+    [Verb("coindata", HelpText = "Generates the CoinData file from CoinGecko.")]
     public class GenerateCoinDataOptions
     {
         [Option('o', "output", Required = true, HelpText = "Sets the output file where to save the generated file.")]

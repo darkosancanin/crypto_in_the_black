@@ -1,25 +1,5 @@
 ## CryptoInTheBlack.com - AWS Serverless Application Project
 
-```
-# Compile
-sam build
-
-# Built Artifacts  : .aws-sam\build
-# Built Template   : .aws-sam\build\template.yaml
-
-# Change into the build directory
-cd .aws-sam\build
-
-# Package SAM template
-sam package --template-file template.yaml --s3-bucket cryptointheblack --output-template-file packaged.yml
-
-# Deploy packaged SAM template
-$ sam deploy --template-file packaged.yml --stack-name dev-cryptointheblack --capabilities CAPABILITY_IAM
-
-# Delete stack
-aws cloudformation delete-stack --stack-name dev-cryptointheblack
-```
-
 This starter project consists of:
 * serverless.template - an AWS CloudFormation Serverless Application Model template file for declaring your Serverless functions and other AWS resources
 * Function.cs - class file containing the C# method mapped to the single function declared in the template file
