@@ -27,21 +27,29 @@ Mappings:
 
   RegionMap:
     us-east-1:
-      S3HostedZoneId: Z3AQBSTGFYJSTF
+      S3hostedzoneID: Z3AQBSTGFYJSTF
+      S3WebsiteEndpoint: s3-website-us-east-1.amazonaws.com
     us-west-1:
-      S3HostedZoneId: Z2F56UZL2M1ACD
+      S3hostedzoneID: Z2F56UZL2M1ACD
+      S3WebsiteEndpoint: s3-website-us-west-1.amazonaws.com
     us-west-2:
-      S3HostedZoneId: Z3BJ6K6RIION7M
+      S3hostedzoneID: Z3BJ6K6RIION7M
+      S3WebsiteEndpoint: s3-website-us-west-2.amazonaws.com
     eu-west-1:
-      S3HostedZoneId: Z1BKCTXD74EZPE
+      S3hostedzoneID: Z1BKCTXD74EZPE
+      S3WebsiteEndpoint: s3-website-eu-west-1.amazonaws.com
     ap-southeast-1:
-      S3HostedZoneId: Z3O0J2DXBE1FTB
+      S3hostedzoneID: Z3O0J2DXBE1FTB
+      S3WebsiteEndpoint: s3-website-ap-southeast-1.amazonaws.com
     ap-southeast-2:
-      S3HostedZoneId: Z1WCIGYICN2BYD
+      S3hostedzoneID: Z1WCIGYICN2BYD
+      S3WebsiteEndpoint: s3-website-ap-southeast-2.amazonaws.com
     ap-northeast-1:
-      S3HostedZoneId: Z2M4EHUR26P7ZW
+      S3hostedzoneID: Z2M4EHUR26P7ZW
+      S3WebsiteEndpoint: s3-website-ap-northeast-1.amazonaws.com
     sa-east-1:
-      S3HostedZoneId: Z31GFT0UA1I2HV
+      S3hostedzoneID: Z31GFT0UA1I2HV
+      S3WebsiteEndpoint: s3-website-sa-east-1.amazonaws.com
 
 Resources:
   WebsiteS3Bucket:
@@ -74,7 +82,7 @@ Resources:
       DistributionConfig:
         Comment: Cloudfront Distribution pointing to S3 bucket
         Origins:
-        - DomainName: !Join ['', [!FindInMap [EnvironmentMap, !Ref Environment, DomainName], '.s3.amazonaws.com']]
+        - DomainName: !Join ['', [!FindInMap [EnvironmentMap, !Ref Environment, DomainName], '.', !FindInMap [ RegionMap, !Ref 'AWS::Region', S3WebsiteEndpoint]]]
           Id: S3Origin
           CustomOriginConfig:
             HTTPPort: '80'
