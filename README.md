@@ -20,6 +20,11 @@ npm run build
 
 Build artifacts : /build
 
+Deploy AWS cloudformation stack:
+```
+aws cloudformation deploy --template template.yml --stack-name dev-www-cryptointheblack
+```
+
 * * *
 
 #### /server/CryptoInTheBlack/
