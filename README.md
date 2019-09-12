@@ -8,21 +8,24 @@ Made up of the following projects:
 
 Simple one page React app which uses create-react-app (https://github.com/facebook/create-react-app).
 
-To start the development server:
+**build & deploy**
+
 ```
+# start the development server
 npm run start
-```
 
-To build the production build:
-```
+# build the production build:
 npm run build
-```
 
-Build artifacts : /build
-
-Deploy AWS cloudformation stack:
-```
+# deploy AWS cloudformation stack (change stackname as required):
 aws cloudformation deploy --template template.yml --stack-name dev-www-cryptointheblack
+```
+
+**delete**
+
+```
+# delete stack (change stackname as required)
+aws cloudformation delete-stack --stack-name dev-www-cryptointheblack
 ```
 
 * * *
@@ -31,33 +34,28 @@ aws cloudformation deploy --template template.yml --stack-name dev-www-cryptoint
 
 .NET Core project with the AWS Lambda functions.
 
-To build the project: 
+**build & deploy**
 
 ```
+# build the project (using SAM)
+# note: artifacts are saved to '.aws-sam\build'
 sam build
-```
 
-Built artifacts  : .aws-sam\build
-Built template   : .aws-sam\build\template.yaml
-
-Change directory to the build directory:
-```
+# change directory to the build directory
 cd .aws-sam\build
-```
 
-Package SAM template
-```
+# package SAM template
 sam package --template-file template.yaml --s3-bucket cryptointheblack --output-template-file packaged.yml
+
+# deploy packaged SAM template (change stackname as required):
+sam deploy --template-file packaged.yml --stack-name dev-api-cryptointheblack --capabilities CAPABILITY_IAM
 ```
 
-Deploy packaged SAM template:
-```
-sam deploy --template-file packaged.yml --stack-name dev-cryptointheblack --capabilities CAPABILITY_IAM
-```
+**delete**
 
-Delete stack
 ```
-aws cloudformation delete-stack --stack-name dev-cryptointheblack
+# delete stack (change stackname as required)
+aws cloudformation delete-stack --stack-name dev-api-cryptointheblack
 ```
 
 * * *
@@ -66,8 +64,8 @@ aws cloudformation delete-stack --stack-name dev-cryptointheblack
 
 Integration tests for the /CryptoInTheBlack/ project.
 
-Run tests:
 ```
+#run tests
 dotnet test
 ```
 
@@ -78,8 +76,8 @@ dotnet test
 
 Unit tests for the /CryptoInTheBlack/ project.
 
-Run tests:
 ```
+#run tests
 dotnet test
 ```
 
@@ -90,12 +88,10 @@ dotnet test
 
 Console app created to run some periodic offline processes, currently used to generate the sitemap.xml file and also dynamically creates the CoinData file which stores basic information for each coin so users can search without having to hit the CoinGecko api for every call.
 
-Generate sitemap:
 ```
+# generate sitemap (change output location as required)
 dotnet run sitemap -o C:\location\of\sitemap.xml
-```
 
-Generate CoinData file:
-```
+# generate CoinData file (change output location as required)
 dotnet run coindata -o C:\location\of\CoinData.cs
 ```
