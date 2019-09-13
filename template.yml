@@ -1,0 +1,206 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: 'CryptoInTheBlack.com - AWS Serverless Application.'
+
+Parameters:
+  EnvironmentPrefix: 
+    Type: String
+    Default: dev-
+
+  DomainName:
+    Type: String
+    Default: cryptointheblack.com
+
+  SslCertificate:
+    Type: String
+    Default: arn:aws:acm:us-east-1:447069887009:certificate/51c9fb90-f271-4366-8116-450e6c606fee
+
+Globals:
+  Api:
+    Cors:
+      AllowMethods: "'OPTIONS,GET'"
+      AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+      AllowOrigin: "'*'"
+
+Mappings:
+  RegionMap:
+    us-east-1:
+      S3WebsiteEndpoint: s3-website-us-east-1.amazonaws.com
+    us-west-1:
+      S3WebsiteEndpoint: s3-website-us-west-1.amazonaws.com
+    us-west-2:
+      S3WebsiteEndpoint: s3-website-us-west-2.amazonaws.com
+    eu-west-1:
+      S3WebsiteEndpoint: s3-website-eu-west-1.amazonaws.com
+    ap-southeast-1:
+      S3WebsiteEndpoint: s3-website-ap-southeast-1.amazonaws.com
+    ap-southeast-2:
+      S3WebsiteEndpoint: s3-website-ap-southeast-2.amazonaws.com
+    ap-northeast-1:
+      S3WebsiteEndpoint: s3-website-ap-northeast-1.amazonaws.com
+    sa-east-1:
+      S3WebsiteEndpoint: s3-website-sa-east-1.amazonaws.com
+
+Resources:
+  SearchFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: CryptoInTheBlack::CryptoInTheBlack.Function.CoinFunctions::Search
+      Runtime: dotnetcore2.1
+      CodeUri: ""
+      MemorySize: 256
+      Timeout: 30
+      Role: null
+      Policies: AWSLambdaBasicExecutionRole
+      Events: 
+        Search: 
+          Type: Api 
+          Properties: 
+            Path: /search/{searchText+} 
+            Method: GET
+        RootSearch: 
+          Type: Api 
+          Properties: 
+            Path: /search
+            Method: GET
+
+  CoinFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: CryptoInTheBlack::CryptoInTheBlack.Function.CoinFunctions::Coin
+      Runtime: dotnetcore2.1
+      CodeUri: ""
+      MemorySize: 256
+      Timeout: 30
+      Role: null
+      Policies: AWSLambdaBasicExecutionRole
+      Events: 
+        Coin: 
+          Type: Api 
+          Properties: 
+            Path: /coin/{symbol} 
+            Method: GET
+
+  ApiGatewayDomainName:
+    Type: AWS::ApiGateway::DomainName
+    Properties: 
+      CertificateArn: !Ref SslCertificate
+      DomainName: !Join ['', [!Ref EnvironmentPrefix, 'api.', !Ref DomainName]]
+
+  ApiGatewayBasePathMapping:
+    Type: AWS::ApiGateway::BasePathMapping
+    Properties:
+      DomainName: !Ref ApiGatewayDomainName
+      RestApiId: !Ref ServerlessRestApi
+      Stage: Prod
+
+  APIDomain:
+    Type: AWS::Route53::RecordSetGroup
+    Properties: 
+      HostedZoneName: !Join ['', [!Ref DomainName, '.']]
+      RecordSets:
+      - Name: !Join ['', [!Ref EnvironmentPrefix, 'api.', !Ref DomainName]]
+        Type: A
+        AliasTarget:
+          DNSName: !GetAtt ApiGatewayDomainName.DistributionDomainName
+          HostedZoneId: Z2FDTNDATAQYW2
+
+  WebsiteS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Join ['', [!Ref EnvironmentPrefix, 'www.', !Ref DomainName]]
+      AccessControl: PublicRead
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: index.html
+    DeletionPolicy: Delete
+
+  WebsiteS3BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref WebsiteS3Bucket
+      PolicyDocument:
+        Statement:
+        - Sid: PublicReadForGetBucketObjects
+          Effect: Allow
+          Principal: '*'
+          Action: s3:GetObject
+          Resource: !Join ['', ['arn:aws:s3:::', !Ref WebsiteS3Bucket, /*]]
+
+  WebsiteCloudfrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    DependsOn:
+    - WebsiteS3Bucket
+    Properties:
+      DistributionConfig:
+        Comment: Cloudfront distribution pointing to S3 bucket
+        Origins:
+        - DomainName: !Join ['', [!Ref EnvironmentPrefix, 'www.', !Ref DomainName, '.', !FindInMap [ RegionMap, !Ref 'AWS::Region', S3WebsiteEndpoint]]]
+          Id: S3Origin
+          CustomOriginConfig:
+            HTTPPort: '80'
+            HTTPSPort: '443'
+            OriginProtocolPolicy: http-only
+        Enabled: true
+        HttpVersion: 'http2'
+        DefaultRootObject: index.html
+        Aliases:
+        - !Join ['', [!Ref EnvironmentPrefix, 'www.', !Ref DomainName]]
+        CustomErrorResponses:
+        - ErrorCode: '403'
+          ResponsePagePath: "/index.html"
+          ResponseCode: '200'
+          ErrorCachingMinTTL: '300'
+        - ErrorCode: '404'
+          ResponsePagePath: "/index.html"
+          ResponseCode: '200'
+          ErrorCachingMinTTL: '300'
+        DefaultCacheBehavior:
+          AllowedMethods:
+          - GET
+          - HEAD
+          Compress: true
+          TargetOriginId: S3Origin
+          ForwardedValues:
+            QueryString: true
+            Cookies:
+              Forward: none
+          ViewerProtocolPolicy: redirect-to-https
+        PriceClass: PriceClass_All
+        ViewerCertificate:
+          AcmCertificateArn: !Ref SslCertificate
+          SslSupportMethod: sni-only
+
+  WebsiteDnsRecord:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneName: !Join ['', [!Ref DomainName, '.']]
+      RecordSets:
+      - Name: !Join ['', [!Ref EnvironmentPrefix, 'www.', !Ref DomainName]]
+        Type: A
+        AliasTarget:
+          HostedZoneId: Z2FDTNDATAQYW2
+          DNSName: !GetAtt [WebsiteCloudfrontDistribution, DomainName]
+
+Outputs:
+  ApiGatewayURL:
+    Description: 'API Gateway endpoint URL'
+    Value:
+      'Fn::Sub': 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/'
+
+  ApiGatewayDomainName:
+    Description: 'API Gateway domain name'
+    Value:
+      !GetAtt ApiGatewayDomainName.DistributionDomainName
+
+  S3BucketName:
+    Value: !Ref WebsiteS3Bucket
+    Description: Name of website S3 bucket
+
+  CloudfrontEndpoint:
+    Value: !GetAtt [WebsiteCloudfrontDistribution, DomainName]
+    Description: Endpoint for Cloudfront distribution
+
+  WebsiteDomainName:
+    Value: !Join ['', [!Ref EnvironmentPrefix, 'www.', !Ref DomainName]]
+    Description: Website domain name

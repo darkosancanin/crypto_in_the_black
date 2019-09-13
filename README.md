@@ -19,11 +19,17 @@ npm run build
 
 # deploy AWS cloudformation stack (change stackname as required):
 aws cloudformation deploy --template template.yml --stack-name dev-www-cryptointheblack
+
+# copy files to S3 bucket
+aws s3 cp build/ s3://www.cryptointheblack.com --recursive
 ```
 
 **delete**
 
 ```
+# delete all files from S3 Bucket
+aws s3 rm s3://dev-www.cryptointheblack.com --recursive
+
 # delete stack (change stackname as required)
 aws cloudformation delete-stack --stack-name dev-www-cryptointheblack
 ```
@@ -48,7 +54,7 @@ cd .aws-sam\build
 sam package --template-file template.yaml --s3-bucket cryptointheblack --output-template-file packaged.yml
 
 # deploy packaged SAM template (change stackname as required):
-sam deploy --template-file packaged.yml --stack-name dev-api-cryptointheblack --capabilities CAPABILITY_IAM
+sam deploy --template-file packaged.yml --stack-name staging-cryptointheblack --capabilities CAPABILITY_IAM --parameter-overrides EnvironmentPrefix=staging
 ```
 
 **delete**
