@@ -3,6 +3,7 @@ import { PieChart, Pie, Cell } from "recharts";
 import styled from "styled-components";
 import { CoinContext } from "./CoinContext";
 import { Helmet } from "react-helmet";
+import { API_BASE_URL } from "./Api";
 
 const Cointainer = styled.div`
   margin-top: 50px;
@@ -45,7 +46,7 @@ export const CoinInfo = props => {
       setCoin(undefined);
       setIsLoading(true);
       setHasError(false);
-      fetch(`${process.env.REACT_APP_API_BASE_URL}/coin/${coinContext.symbol}`)
+      fetch(`${API_BASE_URL}/coin/${coinContext.symbol}`)
         .then(response => {
           response
             .json()

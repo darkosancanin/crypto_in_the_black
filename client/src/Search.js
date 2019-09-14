@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import AsyncSelect from "react-select/async";
 import styled from "styled-components";
 import { CoinContext } from "./CoinContext";
+import { API_BASE_URL } from "./Api";
 
 export const Search = () => {
   const coinContext = useContext(CoinContext);
@@ -10,17 +11,15 @@ export const Search = () => {
       callback(coinContext.defaultSearchResults);
       return;
     }
-    fetch(`${process.env.REACT_APP_API_BASE_URL}/search/${inputValue}`).then(
-      response => {
-        response.json().then(data => {
-          var results = data.map(d => {
-            return { value: d.symbol, label: d.name };
-          });
-          if (!inputValue) coinContext.setDefaultSearchResults(results);
-          callback(results);
+    fetch(`${API_BASE_URL}/search/${inputValue}`).then(response => {
+      response.json().then(data => {
+        var results = data.map(d => {
+          return { value: d.symbol, label: d.name };
         });
-      }
-    );
+        if (!inputValue) coinContext.setDefaultSearchResults(results);
+        callback(results);
+      });
+    });
   };
 
   const selectCustomStyles = {

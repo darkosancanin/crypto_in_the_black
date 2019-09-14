@@ -3,7 +3,7 @@ Transform: 'AWS::Serverless-2016-10-31'
 Description: 'CryptoInTheBlack.com - AWS Serverless Application.'
 
 Parameters:
-  EnvironmentPrefix: 
+  EnvPrefix: 
     Type: String
     Default: dev-
 
@@ -85,7 +85,7 @@ Resources:
     Type: AWS::ApiGateway::DomainName
     Properties: 
       CertificateArn: !Ref SslCertificate
-      DomainName: !Join ['', [!Ref EnvironmentPrefix, 'api.', !Ref DomainName]]
+      DomainName: !Join ['', [!Ref EnvPrefix, 'api.', !Ref DomainName]]
 
   ApiGatewayBasePathMapping:
     Type: AWS::ApiGateway::BasePathMapping
@@ -99,7 +99,7 @@ Resources:
     Properties: 
       HostedZoneName: !Join ['', [!Ref DomainName, '.']]
       RecordSets:
-      - Name: !Join ['', [!Ref EnvironmentPrefix, 'api.', !Ref DomainName]]
+      - Name: !Join ['', [!Ref EnvPrefix, 'api.', !Ref DomainName]]
         Type: A
         AliasTarget:
           DNSName: !GetAtt ApiGatewayDomainName.DistributionDomainName
@@ -108,7 +108,7 @@ Resources:
   WebsiteS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Join ['', [!Ref EnvironmentPrefix, 'www.', !Ref DomainName]]
+      BucketName: !Join ['', [!Ref EnvPrefix, 'www.', !Ref DomainName]]
       AccessControl: PublicRead
       WebsiteConfiguration:
         IndexDocument: index.html
@@ -135,7 +135,7 @@ Resources:
       DistributionConfig:
         Comment: Cloudfront distribution pointing to S3 bucket
         Origins:
-        - DomainName: !Join ['', [!Ref EnvironmentPrefix, 'www.', !Ref DomainName, '.', !FindInMap [ RegionMap, !Ref 'AWS::Region', S3WebsiteEndpoint]]]
+        - DomainName: !Join ['', [!Ref EnvPrefix, 'www.', !Ref DomainName, '.', !FindInMap [ RegionMap, !Ref 'AWS::Region', S3WebsiteEndpoint]]]
           Id: S3Origin
           CustomOriginConfig:
             HTTPPort: '80'
@@ -145,7 +145,7 @@ Resources:
         HttpVersion: 'http2'
         DefaultRootObject: index.html
         Aliases:
-        - !Join ['', [!Ref EnvironmentPrefix, 'www.', !Ref DomainName]]
+        - !Join ['', [!Ref EnvPrefix, 'www.', !Ref DomainName]]
         CustomErrorResponses:
         - ErrorCode: '403'
           ResponsePagePath: "/index.html"
@@ -176,7 +176,7 @@ Resources:
     Properties:
       HostedZoneName: !Join ['', [!Ref DomainName, '.']]
       RecordSets:
-      - Name: !Join ['', [!Ref EnvironmentPrefix, 'www.', !Ref DomainName]]
+      - Name: !Join ['', [!Ref EnvPrefix, 'www.', !Ref DomainName]]
         Type: A
         AliasTarget:
           HostedZoneId: Z2FDTNDATAQYW2
@@ -202,5 +202,5 @@ Outputs:
     Description: Endpoint for Cloudfront distribution
 
   WebsiteDomainName:
-    Value: !Join ['', [!Ref EnvironmentPrefix, 'www.', !Ref DomainName]]
+    Value: !Join ['', [!Ref EnvPrefix, 'www.', !Ref DomainName]]
     Description: Website domain name
