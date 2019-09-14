@@ -15,13 +15,11 @@ Push-Location "client"
 
 Write-Host "Starting npm build"
 npm run build
-Write-Host "Npm build completed"
 
 Write-Host "Changing back to original directory"
 Pop-Location
 
 Write-Host "Starting upload to S3 bucket"
 aws s3 cp client/build/ $S3Bucket --recursive
-Write-Host "Upload to S3 bucket completed"
 
 Write-Host "Client deployment to S3 completed"
