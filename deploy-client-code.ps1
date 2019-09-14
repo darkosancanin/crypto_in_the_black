@@ -4,7 +4,7 @@ Write-Host "Starting client deployment to S3"
 
 Write-Host "Environment prefix: '$envPrefix'"
 
-$S3Bucket = "s3://$($env)www.cryptointheblack.com/"
+$S3Bucket = "s3://$($envPrefix)www.cryptointheblack.com/"
 Write-Host "S3 Bucket: '$S3Bucket'"
 
 Write-Host "Setting 'REACT_APP_ENV_PREFIX' environment variable"
