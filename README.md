@@ -35,7 +35,7 @@ The project is made up of the following sub-projects:
 
 React app created using create-react-app (https://github.com/facebook/create-react-app).
 
-######build & deploy
+###### build & deploy 
 
 ```
 # start the development server
@@ -51,7 +51,7 @@ aws cloudformation deploy --template template.yml --stack-name dev-www-cryptoint
 aws s3 cp build/ s3://www.cryptointheblack.com --recursive
 ```
 
-######delete
+###### delete
 
 ```
 # delete all files from S3 Bucket
@@ -67,7 +67,7 @@ aws cloudformation delete-stack --stack-name dev-www-cryptointheblack
 
 .NET Core project for the API using AWS Lambda functions.
 
-######build & deploy
+###### build & deploy
 
 ```
 # build the project (using SAM)
@@ -84,7 +84,7 @@ sam package --template-file template.yaml --s3-bucket cryptointheblack --output-
 sam deploy --template-file packaged.yml --stack-name staging-cryptointheblack --capabilities CAPABILITY_IAM --parameter-overrides EnvironmentPrefix=staging
 ```
 
-######delete
+###### delete
 
 ```
 # delete stack (change stackname as required)
