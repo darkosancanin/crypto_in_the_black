@@ -27,6 +27,11 @@ Multiple environments such as test and staging can be handled by passing in an e
 
 ![https://www.cryptointheblack.com](screenshot.png)
 
+In order to delete a environment I can just run the following:
+```
+./delete-env.ps1 "staging-"
+```
+
 * * *
 
 The project is made up of the following sub-projects:
