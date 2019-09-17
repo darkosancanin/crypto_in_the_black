@@ -1,6 +1,6 @@
 ## CryptoInTheBlack.com - AWS Serverless Application Project
 
-Simple SPA app created to play around with some of the following technologies: React, AWS serverless (Lambda, S3, API Gateway, CloudFront, CloudFormation/SAM templates).
+Simple SPA app created to play around with some of the following technologies: React, AWS serverless (Lambda, S3, API Gateway, CloudFront, Route53, CloudFormation/SAM templates).
 
 URL: https://www.cryptointheblack.com
 

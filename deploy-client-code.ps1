@@ -1,4 +1,4 @@
-param ( [string]$envPrefix = "dev-" )
+param ( [string]$envPrefix = "" )
 
 Write-Host "Starting client deployment to S3"
 

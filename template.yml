@@ -5,7 +5,6 @@ Description: 'CryptoInTheBlack.com - AWS Serverless Application.'
 Parameters:
   EnvPrefix: 
     Type: String
-    Default: dev-
 
   DomainName:
     Type: String

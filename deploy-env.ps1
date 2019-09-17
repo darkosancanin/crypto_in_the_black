@@ -1,4 +1,4 @@
-param ( [string]$envPrefix = "dev-" )
+param ( [string]$envPrefix = "" )
 
 Write-Host "Starting environment deployment"
 
@@ -14,10 +14,10 @@ Write-Host "Changing to build directory"
 Push-Location ".aws-sam/build"
 
 Write-Host "Starting sam package"
-sam package --template-file template.yaml --s3-bucket cryptointheblack --output-template-file packaged.yml
+sam package --template-file template.yaml --s3-bucket cryptointheblack --output-template-file packaged.yml --debug
 
 Write-Host "Starting sam deploy"
-sam deploy --template-file packaged.yml --stack-name $stackName --capabilities CAPABILITY_IAM --parameter-overrides EnvPrefix=$envPrefix
+sam deploy --template-file packaged.yml --stack-name $stackName --capabilities CAPABILITY_IAM --parameter-overrides EnvPrefix=$envPrefix --debug
 
 Write-Host "Changing back to original directory"
 Pop-Location

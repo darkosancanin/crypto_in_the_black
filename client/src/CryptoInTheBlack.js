@@ -9,10 +9,10 @@ import { Search } from "./Search";
 export const CryptoInTheBlack = () => {
   const Background = styled.div`
     background-image: url("/crypto_in_the_black_bg.jpg");
-    height: 100vh;
-    position: relative;
-    background-size: cover;
+    height: 100%;
+    background-position: center;
     background-repeat: no-repeat;
+    background-size: cover;
   `;
 
   const FlexContainer = styled.div`
