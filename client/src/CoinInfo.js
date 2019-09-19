@@ -108,76 +108,92 @@ export const CoinInfo = props => {
             {
               id: "positive :)",
               data: [
-                { x: 0, y: 0.7 },
-                { x: 1, y: 0.9 },
-                { x: 2, y: 0.8 },
-                { x: 3, y: 0.6 },
-                { x: 4, y: 0.3 },
-                { x: 5, y: 0 },
-                { x: 6, y: null },
-                { x: 7, y: null },
-                { x: 8, y: null },
-                { x: 9, y: null },
-                { x: 10, y: null },
-                { x: 11, y: 0 },
-                { x: 12, y: 0.4 },
-                { x: 13, y: 0.6 },
-                { x: 14, y: 0.5 },
-                { x: 15, y: 0.3 },
-                { x: 16, y: 0.4 },
-                { x: 17, y: 0 }
+                { x: "2018-01-01", y: 0.7 },
+                { x: "2018-01-02", y: 0.9 },
+                { x: "2018-01-03", y: 0.8 },
+                { x: "2018-01-04", y: 0.6 },
+                { x: "2018-01-05", y: 0.3 },
+                { x: "2018-01-06", y: 0 },
+                { x: "2018-01-07", y: null },
+                { x: "2018-01-08", y: null },
+                { x: "2018-01-09", y: null },
+                { x: "2018-01-10", y: null },
+                { x: "2018-01-11", y: null },
+                { x: "2018-01-12", y: 0 },
+                { x: "2018-01-13", y: 0.4 },
+                { x: "2018-01-14", y: 0.6 },
+                { x: "2018-01-15", y: 0.5 },
+                { x: "2018-01-16", y: 0.3 },
+                { x: "2018-01-17", y: 0.4 },
+                { x: "2018-01-18", y: 0 }
               ]
             },
             {
               id: "negative :(",
               data: [
-                { x: 5, y: 0 },
-                { x: 6, y: -0.3 },
-                { x: 7, y: -0.5 },
-                { x: 8, y: -0.9 },
-                { x: 9, y: -0.2 },
-                { x: 10, y: -0.4 },
-                { x: 11, y: 0 },
-                { x: 12, y: null },
-                { x: 13, y: null },
-                { x: 14, y: null },
-                { x: 15, y: null },
-                { x: 16, y: null },
-                { x: 17, y: 0 },
-                { x: 18, y: -0.4 },
-                { x: 19, y: -0.2 },
-                { x: 20, y: -0.1 },
-                { x: 21, y: -0.6 }
+                { x: "2018-01-01", y: null },
+                { x: "2018-01-02", y: null },
+                { x: "2018-01-03", y: null },
+                { x: "2018-01-04", y: null },
+                { x: "2018-01-05", y: null },
+                { x: "2018-01-06", y: 0 },
+                { x: "2018-01-07", y: -0.3 },
+                { x: "2018-01-08", y: -0.5 },
+                { x: "2018-01-09", y: -0.9 },
+                { x: "2018-01-10", y: -0.2 },
+                { x: "2018-01-11", y: -0.4 },
+                { x: "2018-01-12", y: 0 },
+                { x: "2018-01-13", y: null },
+                { x: "2018-01-14", y: null },
+                { x: "2018-01-15", y: null },
+                { x: "2018-01-16", y: null },
+                { x: "2018-01-17", y: null },
+                { x: "2018-01-18", y: 0 },
+                { x: "2018-01-19", y: -0.4 },
+                { x: "2018-01-20", y: -0.2 },
+                { x: "2018-01-21", y: -0.1 },
+                { x: "2018-01-22", y: -0.6 }
               ]
             }
           ]}
-          curve="monotoneX"
+          xScale={{
+            type: "time",
+            format: "%Y-%m-%d",
+            precision: "day"
+          }}
+          xFormat="time:%Y-%m-%d"
+          yScale={{
+            type: "linear",
+            min: -1,
+            max: 1
+          }}
+          axisLeft={{
+            legend: "linear scale"
+            //legendOffset: 12
+          }}
+          axisBottom={{
+            format: "%b %d",
+            tickValues: "every 2 days",
+            legend: "time scale"
+            //legendOffset: -12
+          }}
+          curve={"monotoneX"}
+          enableArea={true}
+          areaBaselineValue={0.2}
+          colors={["rgb(97, 205, 187)", "rgb(244, 117, 96)"]}
           enablePointLabel={true}
-          pointSize={4}
+          pointSize={16}
           pointBorderWidth={1}
           pointBorderColor={{
             from: "color",
             modifiers: [["darker", 0.3]]
           }}
           pointLabelYOffset={-20}
-          enableGridX={false}
-          colors={["rgb(97, 205, 187)", "rgb(244, 117, 96)"]}
-          xScale={{
-            type: "linear"
-          }}
-          yScale={{
-            type: "linear",
-            stacked: false,
-            min: -1,
-            max: 1
-          }}
-          enableArea={true}
-          areaOpacity={0.14}
-          enableSlices={false}
           useMesh={true}
-          crosshairType="cross"
+          enableSlices={false}
         />
       </LineContainer>
+
       {hasError && <Error>Oops something went wrong. Please try again.</Error>}
       {isLoading && <img src="/loading.gif" alt="Loading..." />}
       {coin && (
