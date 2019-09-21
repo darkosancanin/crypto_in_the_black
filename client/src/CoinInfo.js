@@ -61,27 +61,6 @@ export const CoinInfo = props => {
     }
   }, [coinContext.symbol]);
 
-  const formatDate = dateValue => {
-    const months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec"
-    ];
-    let dateToFromat = new Date(dateValue);
-    return `${dateToFromat.getDate()} ${
-      months[dateToFromat.getMonth()]
-    } ${dateToFromat.getFullYear()}`;
-  };
-
   const Error = styled.div`
     color: white;
     font-size: 1.5rem;
@@ -202,12 +181,7 @@ export const CoinInfo = props => {
             <title>{`Crypto In The Black - ${coin.name} (${coin.symbol})`}</title>
           </Helmet>
           {coin.image && <CoinLogoImg src={coin.image} title={coin.name} />}
-          <CoinParagraph>
-            It has been profitable to buy and hold {coin.name} for{" "}
-            {coin.daysProfitable} out of the last {coin.totalDays} days (
-            {coin.daysProfitablePercentage}%) since {formatDate(coin.sinceDate)}
-            .
-          </CoinParagraph>
+          <CoinParagraph>{coin.profitableDescription}</CoinParagraph>
           <GraphContainer>
             <PieContainer>
               <ResponsivePieCanvas
@@ -248,11 +222,54 @@ export const CoinInfo = props => {
               />
             </PieContainer>
           </GraphContainer>
-          <CoinParagraph>
-            It has not been profitable to buy and hold {coin.name} for{" "}
-            {coin.daysNotProfitable} out of the last {coin.totalDays} days (
-            {coin.daysNotProfitablePercentage}%).
-          </CoinParagraph>
+          <CoinParagraph>{coin.notProfitableDescription}</CoinParagraph>
+          {console.log(coin.chart.profitable)}
+          {console.log(coin.chart.notProfitable)}
+          <LineContainer>
+            <ResponsiveLine
+              animate={true}
+              margin={{ top: 20, right: 20, bottom: 60, left: 80 }}
+              data={[
+                {
+                  id: "profitable",
+                  data: coin.chart.profitable
+                },
+                {
+                  id: "notProfitable",
+                  data: coin.chart.notProfitable
+                }
+              ]}
+              xScale={{
+                type: "time",
+                format: "%Y-%m-%d",
+                precision: "day"
+              }}
+              xFormat="time:%Y-%m-%d"
+              yScale={{
+                type: "linear",
+                min: 0,
+                max: coin.allTimeHighPrice
+              }}
+              axisBottom={{
+                format: "%b %y",
+                tickValues: "every 6 months"
+              }}
+              curve={"monotoneX"}
+              enableArea={true}
+              areaBaselineValue={coin.latestPrice}
+              colors={["rgb(73, 105, 99)", "rgb(244, 117, 96)"]}
+              enablePointLabel={false}
+              pointSize={1}
+              pointBorderWidth={1}
+              pointBorderColor={{
+                from: "color",
+                modifiers: [["darker", 0.3]]
+              }}
+              pointLabelYOffset={-20}
+              useMesh={true}
+              enableSlices={false}
+            />
+          </LineContainer>
         </>
       )}
     </Cointainer>

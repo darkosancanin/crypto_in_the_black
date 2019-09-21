@@ -14,7 +14,9 @@ namespace CryptoInTheBlack.IntegrationTests.Service
 
             Assert.NotNull(coinStats);
             Assert.Equal("btc", coinStats.Symbol);
-            Assert.True(coinStats.TotalDays > 2300);
+            Assert.NotNull(coinStats.ProfitableDescription);
+            Assert.NotNull(coinStats.NotProfitableDescription);
+            Assert.NotNull(coinStats.AllTimeHighDescription);
         }
     }
 }

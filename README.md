@@ -54,6 +54,9 @@ aws cloudformation deploy --template template.yml --stack-name dev-www-cryptoint
 
 # copy files to S3 bucket
 aws s3 cp build/ s3://www.cryptointheblack.com --recursive
+
+# set environment prefix 
+$env:REACT_APP_ENV_PREFIX="dev-"
 ```
 
 ###### delete
@@ -87,6 +90,9 @@ sam package --template-file template.yaml --s3-bucket cryptointheblack --output-
 
 # deploy packaged SAM template (change stackname as required):
 sam deploy --template-file packaged.yml --stack-name staging-cryptointheblack --capabilities CAPABILITY_IAM --parameter-overrides EnvironmentPrefix=staging
+
+# build and run in local docker container
+sam build; sam local start-api -s ./server/CryptoInTheBlack/ -p 4000
 ```
 
 ###### delete

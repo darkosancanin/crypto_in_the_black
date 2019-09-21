@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using CryptoInTheBlack.Model;
@@ -43,7 +44,7 @@ namespace CryptoInTheBlack.Service
         {
             var response = await _httpClient.GetStringAsync($"{API_BASE_URL}/coins/{id}/market_chart?vs_currency=usd&days=max");
             var priceHistory = JsonConvert.DeserializeObject<CoinGeckoPriceHistory>(response);
-            return priceHistory.GetPrices();
+            return priceHistory.GetPrices().OrderBy(x => x.Date).ToList();
         }
     }
 }
