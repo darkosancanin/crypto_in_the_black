@@ -23,20 +23,29 @@ namespace CryptoInTheBlack.Model.View
             ProfitableDescription = $"It has been profitable to buy and hold {coin.Name} for {daysProfitable} out of the last {totalDays} days ({DaysProfitablePercentage}%) since {priceHistory.First().Date:dd MMMM yyyy}.";
             NotProfitableDescription = $"It has not been profitable to buy and hold {coin.Name} for {priceHistory.Count - daysProfitable} out of the last {totalDays} days ({DaysNotProfitablePercentage}%).";
 
-            var profitableChartItems = new CoinStatsChartItem[priceHistory.Count - 1];
-            var notProfitableChartItems = new CoinStatsChartItem[priceHistory.Count - 1];
-
-            var allTimeHigh = priceHistory.First();
-            for (var i = 0; i < priceHistory.Count - 1; i++)
+            // only plot approximately x points.
+            var chartPriceHistory = priceHistory;
+            if (priceHistory.Count > 1000)
             {
-                var dayPrice = priceHistory[i];
-                profitableChartItems[i] = new CoinStatsChartItem(dayPrice.Date, dayPrice.Price <= LatestPrice ? dayPrice.Price : (decimal?)null);
-                notProfitableChartItems[i] = new CoinStatsChartItem(dayPrice.Date, dayPrice.Price >= LatestPrice ? dayPrice.Price : (decimal?)null);
-                if (dayPrice.Price >= allTimeHigh.Price)
-                    allTimeHigh = dayPrice;
+                var takeNthElement = Math.Round(priceHistory.Count / 1000m);
+                chartPriceHistory = priceHistory.Where((x, i) => i == 0 || i == priceHistory.Count - 1 || i % takeNthElement == 0).ToList();
             }
 
+            var profitableChartItems = new CoinStatsChartItem[chartPriceHistory.Count - 1];
+            var notProfitableChartItems = new CoinStatsChartItem[chartPriceHistory.Count - 1];
+            for (var i = 0; i < chartPriceHistory.Count - 1; i++)
+            {
+                var currentPrice = chartPriceHistory[i];
+                var tomorrowPrice = i < chartPriceHistory.Count - 2 ? chartPriceHistory[i + 1] : null;
+                // add plot point if its profitable or if tomorrow is profitable so the lines dont have gaps
+                var isProfitable = currentPrice.Price <= LatestPrice || tomorrowPrice != null && tomorrowPrice.Price <= LatestPrice;
+                profitableChartItems[i] = new CoinStatsChartItem(currentPrice.Date, isProfitable ? currentPrice.Price : (decimal?)null);
+                var isNotProfitable = currentPrice.Price >= LatestPrice || tomorrowPrice != null && tomorrowPrice.Price >= LatestPrice;
+                notProfitableChartItems[i] = new CoinStatsChartItem(currentPrice.Date, isNotProfitable ? currentPrice.Price : (decimal?)null);
+            }
             Chart = new CoinStatsChart(profitableChartItems, notProfitableChartItems);
+
+            var allTimeHigh = priceHistory.OrderByDescending(x => x.Price).First();
             AllTimeHighPrice = allTimeHigh.Price;
             AllTimeHighDescription = $"The all time high was ${allTimeHigh.Price:F2} on {allTimeHigh.Date:dd MMMM yyyy} which was {(DateTime.Now.Date - allTimeHigh.Date).Days} days ago.";
         }

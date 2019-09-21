@@ -26,49 +26,49 @@ export const CryptoInTheBlack = () => {
     display: flex;
     flex-direction: column;
     text-align: center;
-    padding-left: 50px;
-    padding-right: 50px;
+    padding-left: 25px;
+    padding-right: 25px;
   `;
 
   const Title = styled.span`
     margin-left: 20px;
     font-size: 1.5em;
+    color: white;
     @media (max-width: 768px) {
       display: block;
     }
   `;
 
-  const HeaderContent = styled.div`
-    font-size: 1.5rem;
-    font-weight: 300;
-    color: white;
-    margin-top: 50px;
-    margin-bottom: 50px;
-    display: flex;
-    flex-direction: column;
-  `;
-
   const HeadingImg = styled.img`
     vertical-align: middle;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
   `;
 
   const Heading = styled.div`
-    margin-bottom: 50px;
+    margin: 25px 0 0 0;
+    font-size: 1.5rem;
+    font-weight: 300;
+  `;
+
+  const IntroParagraph = styled.div`
+    margin: 25px 0 25px 0;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 300;
   `;
 
   return (
     <Background>
       <FlexContainer>
         <MainContent>
-          <HeaderContent>
-            <Heading>
-              <HeadingImg src={Logo} alt="Crypto In The Black" />
-              <Title>Crypto In The Black</Title>
-            </Heading>
+          <Heading>
+            <HeadingImg src={Logo} alt="Crypto In The Black" />
+            <Title>Crypto In The Black</Title>
+          </Heading>
+          <IntroParagraph>
             Find out how many days it has been protifable to buy and hold
             different cryptocurrencies.
-          </HeaderContent>
+          </IntroParagraph>
           <Search />
           <Router>
             <Route path="/:symbol?" component={CoinInfo} />

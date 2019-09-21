@@ -5,7 +5,6 @@ import styled from "styled-components";
 
 export const Footer = () => {
   const FooterContainer = styled.div`
-    padding: 10px;
     display: flex;
     justify-content: center;
     text-align: center;
@@ -14,6 +13,7 @@ export const Footer = () => {
     color: #ffffff;
     padding: 15px;
     opacity: 0.85;
+    margin-top: 15px;
   `;
 
   const FooterLink = styled.a`

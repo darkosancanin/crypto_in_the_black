@@ -35,23 +35,29 @@ export const Search = () => {
   };
 
   const SearchContainer = styled.div`
+    margin: 25px 0 25px 0;
+  `;
+
+  const SearchWrapper = styled.div`
     width: 580px;
     margin: 0 auto;
     @media (max-width: 650px) {
-      width: 320px;
+      width: 300px;
     }
   `;
 
   return (
     <SearchContainer>
-      <AsyncSelect
-        cacheOptions
-        loadOptions={loadOptions}
-        defaultOptions
-        styles={selectCustomStyles}
-        onChange={e => coinContext.setSymbol(e.value)}
-        placeholder="Search for coin..."
-      />
+      <SearchWrapper>
+        <AsyncSelect
+          cacheOptions
+          loadOptions={loadOptions}
+          defaultOptions
+          styles={selectCustomStyles}
+          onChange={e => coinContext.setSymbol(e.value)}
+          placeholder="Search for coin..."
+        />
+      </SearchWrapper>
     </SearchContainer>
   );
 };

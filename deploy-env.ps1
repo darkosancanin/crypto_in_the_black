@@ -14,10 +14,10 @@ Write-Host "Changing to build directory"
 Push-Location ".aws-sam/build"
 
 Write-Host "Starting sam package"
-sam package --template-file template.yaml --s3-bucket cryptointheblack --output-template-file packaged.yml --debug
+sam package --template-file template.yaml --s3-bucket cryptointheblack --output-template-file packaged.yml
 
 Write-Host "Starting sam deploy"
-sam deploy --template-file packaged.yml --stack-name $stackName --capabilities CAPABILITY_IAM --parameter-overrides EnvPrefix=$envPrefix --debug
+sam deploy --template-file packaged.yml --stack-name $stackName --capabilities CAPABILITY_IAM --parameter-overrides EnvPrefix=$envPrefix
 
 Write-Host "Changing back to original directory"
 Pop-Location
