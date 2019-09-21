@@ -87,6 +87,10 @@ export const CoinInfo = props => {
     }
   `;
 
+  const DisclaimerText = styled.span`
+    cursor: pointer;
+  `;
+
   return (
     <div>
       {hasError && <Error>Oops something went wrong. Please try again.</Error>}
@@ -96,8 +100,17 @@ export const CoinInfo = props => {
           <Helmet>
             <title>{`Crypto In The Black - ${coin.name} (${coin.symbol})`}</title>
           </Helmet>
-          {coin.image && <CoinLogoImg src={coin.image} title={coin.name} />}
-          <CoinParagraph>{coin.profitableDescription}</CoinParagraph>
+          {coin.image && (
+            <a href={coin.url}>
+              <CoinLogoImg src={coin.image} title={coin.name} />
+            </a>
+          )}
+          <CoinParagraph>
+            {coin.profitableDescription}{" "}
+            <DisclaimerText title="Calculated from the earliest date that pricing data is available from our data provider CoinGecko.">
+              *
+            </DisclaimerText>
+          </CoinParagraph>
           <CenteringDiv>
             <PieContainer>
               <ResponsivePieCanvas
