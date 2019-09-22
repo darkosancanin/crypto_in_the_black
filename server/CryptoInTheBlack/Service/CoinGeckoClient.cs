@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Amazon.XRay.Recorder.Handlers.System.Net;
 using CryptoInTheBlack.Model;
 using Newtonsoft.Json;
 
@@ -19,7 +20,7 @@ namespace CryptoInTheBlack.Service
         private static string API_BASE_URL = "https://api.coingecko.com/api/v3";
         private readonly HttpClient _httpClient;
 
-        public CoinGeckoClient() : this(new HttpClient())
+        public CoinGeckoClient() : this(new HttpClient(new HttpClientXRayTracingHandler(new HttpClientHandler())))
         {
         }
 

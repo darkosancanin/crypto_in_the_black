@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
+using Amazon.XRay.Recorder.Core;
 using CryptoInTheBlack.Model.Response;
 using Newtonsoft.Json;
 using CryptoInTheBlack.Service;
