@@ -25,8 +25,9 @@ namespace CryptoInTheBlack.Tests.Function
         public async void Coin_returns_404_if_symbol_not_found()
         {
             var coinRepository = new Mock<ICoinRepository>();
+            var coinLogger = new Mock<ICoinLogger>();
             coinRepository.Setup(x => x.CoinExists("btc")).Returns(false);
-            var coinFunctions = new CoinFunctions(coinRepository.Object);
+            var coinFunctions = new CoinFunctions(coinRepository.Object, coinLogger.Object);
             var pathParams = new Dictionary<string, string> {{"symbol", "btc"}};
 
             var response = await coinFunctions.Coin(new APIGatewayProxyRequest{PathParameters = pathParams}, new TestLambdaContext());

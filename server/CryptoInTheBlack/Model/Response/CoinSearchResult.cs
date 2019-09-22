@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace CryptoInTheBlack.Model.View
+namespace CryptoInTheBlack.Model.Response
 {
     public class CoinSearchResult
     {

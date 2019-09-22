@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 
-namespace CryptoInTheBlack.Model.View
+namespace CryptoInTheBlack.Model.Response
 {
     public class CoinStats
     {

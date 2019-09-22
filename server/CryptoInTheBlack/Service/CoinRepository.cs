@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using CryptoInTheBlack.Model;
 using CryptoInTheBlack.Model.Generated;
-using CryptoInTheBlack.Model.View;
+using CryptoInTheBlack.Model.Response;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace CryptoInTheBlack.Service
@@ -22,15 +22,18 @@ namespace CryptoInTheBlack.Service
         private readonly List<Coin> _coins;
         private readonly ICoinGeckoClient _coinGeckoClient;
         private readonly IMemoryCache _memoryCache;
+        private readonly ICoinLogger _coinLogger;
 
-        public CoinRepository() : this(new CoinGeckoClient(), new MemoryCache(new MemoryCacheOptions()))
+        public CoinRepository() : this(new CoinGeckoClient(), new MemoryCache(new MemoryCacheOptions()), new CoinLogger())
         {
         }
 
-        public CoinRepository(ICoinGeckoClient coinGeckoClient, IMemoryCache memoryCache)
+        public CoinRepository(ICoinGeckoClient coinGeckoClient, IMemoryCache memoryCache, ICoinLogger coinLogger)
         {
+            coinLogger.Log($"Initializing {nameof(CoinRepository)}.");
             _coinGeckoClient = coinGeckoClient;
             _memoryCache = memoryCache;
+            _coinLogger = coinLogger;
             _coins = CoinData.GetAllCoins().Where(x => x.MarketCapRank > 0).GroupBy(x => x.Symbol).Select(x => x.OrderBy(y => y.MarketCapRank).First()).ToList();
             _coinBySymbolLookup = _coins.ToDictionary(x => x.Symbol, x => x);
         }

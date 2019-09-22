@@ -80,6 +80,27 @@ Resources:
             Path: /coin/{symbol} 
             Method: GET
 
+  PokeFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: CryptoInTheBlack::CryptoInTheBlack.Function.CoinFunctions::Poke
+      Runtime: dotnetcore2.1
+      CodeUri: ""
+      MemorySize: 128
+      Timeout: 5
+      Role: null
+      Policies: AWSLambdaBasicExecutionRole
+      Events: 
+        Coin: 
+          Type: Api 
+          Properties: 
+            Path: /poke 
+            Method: GET
+        PingPeriodicallyEvent:
+          Type: Schedule
+          Properties:
+            Schedule: rate(1 minute)
+
   ApiGatewayDomainName:
     Type: AWS::ApiGateway::DomainName
     Properties: 

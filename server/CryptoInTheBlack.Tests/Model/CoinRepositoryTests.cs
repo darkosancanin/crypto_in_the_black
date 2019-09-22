@@ -82,7 +82,8 @@ namespace CryptoInTheBlack.Tests.Model
         public async void GetCoinStats_returns_stats_from_cache_on_second_call()
         {
             var coinGeckoClient = new Mock<ICoinGeckoClient>();
-            var repo = new CoinRepository(coinGeckoClient.Object, new MemoryCache(new MemoryCacheOptions()));
+            var coinLogger = new Mock<ICoinLogger>();
+            var repo = new CoinRepository(coinGeckoClient.Object, new MemoryCache(new MemoryCacheOptions()), coinLogger.Object);
             coinGeckoClient.Setup(x => x.GetCoinPriceHistory("bitcoin")).ReturnsAsync(new List<CoinGeckoPrice>());
 
             await repo.GetCoinStats("btc");

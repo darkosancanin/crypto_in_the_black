@@ -92,7 +92,7 @@ sam package --template-file template.yaml --s3-bucket cryptointheblack --output-
 sam deploy --template-file packaged.yml --stack-name staging-cryptointheblack --capabilities CAPABILITY_IAM --parameter-overrides EnvironmentPrefix=staging
 
 # build and run in local docker container
-sam build; sam local start-api -s ./server/CryptoInTheBlack/ -p 4000
+sam build -s ./server/CryptoInTheBlack/; sam local start-api -s ./server/CryptoInTheBlack/ -p 4000
 ```
 
 ###### delete
